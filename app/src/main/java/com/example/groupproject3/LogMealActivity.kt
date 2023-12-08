@@ -11,7 +11,6 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import android.widget.Toast
 
-
 class LogMealActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,25 +22,31 @@ class LogMealActivity : AppCompatActivity() {
         val timePickerMealTime = findViewById<TimePicker>(R.id.timePickerMealTime)
         val datePickerMealDate = findViewById<DatePicker>(R.id.datePickerMealDate)
         val buttonSaveMeal = findViewById<Button>(R.id.buttonSaveMeal)
+        val buttonBack = findViewById<Button>(R.id.buttonBack)
 
         buttonSaveMeal.setOnClickListener {
             val mealName = editTextMealName.text.toString()
             val mealType = spinnerMealType.selectedItem.toString()
             val mealTime = "${timePickerMealTime.hour}:${timePickerMealTime.minute}"
+            val mealDate = "${datePickerMealDate.month + 1}-${datePickerMealDate.dayOfMonth}-${datePickerMealDate.year}"
 
-            // Adjusting the month value as DatePicker returns month indexed from 0
-            val mealDate = "${datePickerMealDate.dayOfMonth}-${datePickerMealDate.month + 1}-${datePickerMealDate.year}"
+            if (mealName.trim().isEmpty()) {
+                Toast.makeText(this, "Please enter a meal name", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
 
             val newMeal = Meal(mealName, mealType, mealDate, mealTime)
             val meals = getMeals()
             meals.add(newMeal)
             saveMeals(meals)
 
-            // Show confirmation message
             Toast.makeText(this, "Meal Saved Successfully", Toast.LENGTH_SHORT).show()
 
-            // Optionally, navigate back to the Home Screen
-            finish()
+            finishActivityWithTransition()
+        }
+
+        buttonBack.setOnClickListener {
+            finishActivityWithTransition()
         }
     }
 
@@ -64,5 +69,14 @@ class LogMealActivity : AppCompatActivity() {
         } else {
             ArrayList()
         }
+    }
+
+    private fun finishActivityWithTransition() {
+        finish()
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
+    }
+
+    override fun onBackPressed() {
+        finishActivityWithTransition()
     }
 }
