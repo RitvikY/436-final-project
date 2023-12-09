@@ -30,6 +30,13 @@
         android:calendarViewShown="true"
         android:spinnersShown="false" />
 
+    <CheckBox
+        android:id="@+id/checkBoxLogLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Log Location?" />
+
+
     <Button
         android:id="@+id/buttonSaveMeal"
         android:layout_width="wrap_content"

@@ -66,6 +66,7 @@ class ViewMealsActivity : AppCompatActivity() {
         return sdf.format(calendar.time)
     }
 
+
     private fun showMealsForDate(date: String) {
         currentMealsDialog?.dismiss()
         val dialogView = layoutInflater.inflate(R.layout.dialog_meals_list, null)
@@ -74,8 +75,10 @@ class ViewMealsActivity : AppCompatActivity() {
         val mealsForDate = meals.filter { it.date == date }
 
         mealsForDate.forEach { meal ->
+            val mealText = buildMealText(meal)
+            Log.d("ViewMealsActivity", "Meal text: $mealText") // Debugging
             val mealTextView = TextView(this).apply {
-                text = "${meal.type}: ${meal.name}"
+                text = mealText
                 textSize = 16f
                 setPadding(8, 8, 8, 8)
                 setOnClickListener {
@@ -90,6 +93,14 @@ class ViewMealsActivity : AppCompatActivity() {
             .setView(dialogView)
             .setPositiveButton("OK", null)
             .show()
+    }
+
+    private fun buildMealText(meal: Meal): String {
+        var mealText = "${meal.type}: ${meal.name}"
+        if (meal.latitude != null && meal.longitude != null) {
+            mealText += "\nLocation: Lat ${meal.latitude}, Long ${meal.longitude}"
+        }
+        return mealText
     }
 
     private fun confirmAndRemoveMeal(meal: Meal, date: String) {
@@ -130,7 +141,6 @@ class ViewMealsActivity : AppCompatActivity() {
             ArrayList()
         }
     }
-
 
 
 
