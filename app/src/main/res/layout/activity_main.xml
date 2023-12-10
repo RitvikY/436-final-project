@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:padding="16dp">
 
     <TextView
@@ -10,7 +12,7 @@
         android:layout_height="wrap_content"
         android:text="Welcome to Meal Tracker"
         android:textSize="24sp"
-        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
         android:layout_marginTop="50dp"/>
 
     <Button
@@ -18,8 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Log a Meal"
-        android:layout_below="@id/textViewWelcome"
-        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
         android:layout_marginTop="20dp"/>
 
     <Button
@@ -27,8 +28,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="View Meals"
-        android:layout_below="@id/buttonLogMeal"
-        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
         android:layout_marginTop="20dp"/>
 
     <TextView
@@ -36,17 +36,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Places You've Eaten"
-        android:layout_below="@id/buttonViewMeals"
-        android:layout_centerHorizontal="true"
         android:textSize="20sp"
+        android:layout_gravity="center_horizontal"
         android:layout_marginTop="20dp"/>
 
-    <!-- Adjust the size and position of the map fragment -->
     <fragment
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:layout_below="@id/textViewNearbyRestaurants"
+        android:layout_height="300dp"
         android:layout_marginTop="10dp"/>
-</RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/ad_view"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:orientation="horizontal"
+        android:background="#FDDD"
+        android:layout_marginTop="10dp">
+        <!-- Ad view content goes here -->
+    </LinearLayout>
+</LinearLayout>
