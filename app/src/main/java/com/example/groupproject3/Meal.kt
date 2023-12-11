@@ -10,7 +10,7 @@ import java.text.ParseException
 data class Meal(
     val name: String?,
     val type: String?,
-    var date: String?, // Variable can be modified if date and time are swapped
+    var date: String?,
     var time: String?,
     val latitude: Double?,
     val longitude: Double?
@@ -24,5 +24,5 @@ data class Meal(
         }
     }
 
-    // Add any additional methods or logic you need for the Meal class
+
 }

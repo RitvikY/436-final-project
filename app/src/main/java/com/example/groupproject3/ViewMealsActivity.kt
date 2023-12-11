@@ -45,7 +45,6 @@ class ViewMealsActivity : AppCompatActivity() {
     private fun displayRecentMeals() {
         // Clear the layout first to avoid duplicating views
         linearLayoutRecentMeals.removeAllViews()
-        // Assuming you want to show the last 5 meals
         val recentMeals = meals.takeLast(5).reversed()
         recentMeals.forEach { meal ->
             val mealInfo = "${meal.date}: ${meal.type} - ${meal.name}"

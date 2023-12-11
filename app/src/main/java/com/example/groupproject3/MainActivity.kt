@@ -1,6 +1,8 @@
 package com.example.groupproject3
 
 
+/* Group Project: Ritvik Yaragudipati, Roshini Parameswaran, Abhinav Yedla */
+
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -22,6 +24,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.ads.AdError
+import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
@@ -32,15 +35,17 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
     private var ad : InterstitialAd? = null
 
+    lateinit var mAdView : AdView
+    lateinit var adView : AdView
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        var adUnitId : String = "ca-app-pub-3940256099942544/1033173712"
-        var adRequest : AdRequest = (AdRequest.Builder( )).build( )
-        var adLoad : AdLoad = AdLoad( )
-        InterstitialAd.load( this, adUnitId, adRequest, adLoad )
+
+
 
 
         val buttonLogMeal = findViewById<Button>(R.id.buttonLogMeal)
@@ -50,7 +55,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
         buttonLogMeal.setOnClickListener {
 
-            // Intent to start LogMealActivity
             val intent = Intent(this, LogMealActivity::class.java)
             startActivity(intent)
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
@@ -69,7 +73,65 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         mapFragment.getMapAsync(this)
 
 
+
+
+        // Initialize the AdView
+        adView = findViewById(R.id.adView)
+        val adRequest = AdRequest.Builder().build()
+
+        // Set the AdListener
+        adView.adListener = object : AdListener() {
+            override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+                Log.e("MainActivity", "Ad failed to load: ${loadAdError.message}")
+                adView.loadAd(AdRequest.Builder().build()) // Request a new ad
+            }
+
+        }
+
+
+        adView.loadAd(adRequest)
+
     }
+
+    private fun loadBannerAds(){
+        MobileAds.initialize(this) {}
+
+        mAdView = findViewById(R.id.adView)
+        val adRequest = AdRequest.Builder().build()
+        mAdView.loadAd(adRequest)
+
+
+        mAdView.adListener = object: AdListener() {
+            override fun onAdClicked() {
+                // Code to be executed when the user clicks on an ad.
+            }
+
+            override fun onAdClosed() {
+                // Code to be executed when the user is about to return
+                Log.w("MainActivity", "Ad closed, retturning")
+            }
+
+            override fun onAdFailedToLoad(adError : LoadAdError) {
+                Log.w("MainActivity", "Ad did not load, retturning")
+            }
+
+            override fun onAdImpression() {
+                // Code to be executed when an impression is recorded
+                // for an ad.
+            }
+
+            override fun onAdLoaded() {
+                Log.w("MainActivity", "Ad Loaded")
+            }
+
+            override fun onAdOpened() {
+                // Code to be executed when an ad opens an overlay that
+                // covers the screen.
+            }
+        }
+
+    }
+
 
 
 
@@ -115,24 +177,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
 
-    inner class AdLoad : InterstitialAdLoadCallback( ) {
-        override fun onAdFailedToLoad(p0: LoadAdError) {
-            super.onAdFailedToLoad(p0)
-            Log.w( "MainActivity", "ad failed to load" )
-        }
-
-        override fun onAdLoaded(p0: InterstitialAd) {
-            super.onAdLoaded(p0)
-            Log.w( "MainActivity", "ad loaded" )
-            // show the ad
-            ad = p0
-            ad!!.show( this@MainActivity )
-
-            // handle user interaction with the ad
-            var manageAd : ManageAdShowing = ManageAdShowing()
-            ad!!.fullScreenContentCallback = manageAd
-        }
-    }
 
     inner class ManageAdShowing : FullScreenContentCallback( ) {
         override fun onAdDismissedFullScreenContent() {
